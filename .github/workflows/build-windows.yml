@@ -19,17 +19,15 @@ jobs:
           distribution: "temurin"
           java-version: "21"
 
-      - name: Compilar proyecto Java
+      - name: Compilar proyecto Java completo
         run: |
           New-Item -ItemType Directory -Force -Path bin
-          $files = Get-ChildItem -Recurse -Filter *.java | Select-Object -ExpandProperty FullName
-          foreach ($file in $files) {
-              javac -d bin $file
-          }
+          $files = (Get-ChildItem -Recurse -Filter *.java).FullName
+          javac -d bin $files
 
       - name: Crear JAR ejecutable
         run: |
-          echo "Main-Class: Main" > manifest.txt
+          echo "Main-Class: Main.Main" > manifest.txt
           jar cfm Compilador.jar manifest.txt -C bin .
 
       - name: Subir artefacto (Ejecutable)
