@@ -1153,7 +1153,7 @@ public class CompiladorGUI extends JFrame {
         } catch (BadLocationException ignored) {}
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new CompiladorGUI().setVisible(true));
-    }
+    }*/
 }

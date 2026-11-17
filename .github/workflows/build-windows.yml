@@ -3,7 +3,7 @@ name: Build Windows Executable
 on:
   push:
     branches: [main]
-  workflow_dispatch: # Te permite ejecutarlo manualmente desde la pestaña Actions
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,18 +19,19 @@ jobs:
           distribution: "temurin"
           java-version: "21"
 
-      # Si tu proyecto usa Maven:
-      - name: Compilar con Maven
-        run: mvn clean package
+      - name: Compilar proyecto Java
+        run: |
+          New-Item -ItemType Directory -Force -Path bin
+          Get-ChildItem -Recurse -Filter *.java | Select-Object -ExpandProperty FullName | Out-File sources.txt -Encoding utf8
+          javac -d bin @sources.txt
 
-      # O si es un proyecto simple sin Maven/Gradle, puedes compilarlo manualmente así:
-      # - name: Compilar manualmente
-      #   run: |
-      #     mkdir bin
-      #     javac -d bin $(Get-ChildItem -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
+      - name: Crear JAR ejecutable
+        run: |
+          echo "Main-Class: Main.Main" > manifest.txt
+          jar cfm Compilador.jar manifest.txt -C bin .
 
       - name: Subir artefacto (Ejecutable)
         uses: actions/upload-artifact@v4
         with:
           name: Compilador-Windows
-          path: target/*.jar
+          path: Compilador.jar
