@@ -1,0 +1,28 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest # Se ejecuta en un servidor virtual de Windows
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 21 (o versión compatible)
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21" # O la versión que soporte tu proyecto
+
+      - name: Compilar con Maven
+        run: mvn clean package
+
+      - name: Subir artefacto (Ejecutable)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Compilador-Windows
+          path: target/*.jar # O el archivo resultante que genere tu compilación
