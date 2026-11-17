@@ -22,12 +22,14 @@ jobs:
       - name: Compilar proyecto Java
         run: |
           New-Item -ItemType Directory -Force -Path bin
-          Get-ChildItem -Recurse -Filter *.java | Select-Object -ExpandProperty FullName | Out-File sources.txt -Encoding utf8
-          javac -d bin @sources.txt
+          $files = Get-ChildItem -Recurse -Filter *.java | Select-Object -ExpandProperty FullName
+          foreach ($file in $files) {
+              javac -d bin $file
+          }
 
       - name: Crear JAR ejecutable
         run: |
-          echo "Main-Class: Main.Main" > manifest.txt
+          echo "Main-Class: Main" > manifest.txt
           jar cfm Compilador.jar manifest.txt -C bin .
 
       - name: Subir artefacto (Ejecutable)
