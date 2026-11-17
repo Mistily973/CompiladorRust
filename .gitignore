@@ -1,0 +1,9 @@
+# Archivos compilados y carpetas de binarios
+*.class
+bin/
+out/
+target/
+
+# Configuraciones de IDEs
+.vscode/
+.DS_Store
